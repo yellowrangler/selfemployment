@@ -1,0 +1,77 @@
+
+<style>
+table tr td {
+    border:1px solid white;
+    padding-left:10px;
+}
+
+.btn :hover {
+    cursor: pointer;
+}
+</style>
+
+<div class="container">
+<div class="row">
+    <div class="col-lg-12">
+        <h2 style="color:maroon;font-weight:900;">Time Daily Entry Review</h2>
+    </div>
+</div>   
+
+<form id="timeDailyEntryReviewForm" method="post">
+<div style="padding-top:35px;" class="row">
+    <div class="col-md-4">
+        <span style="color:maroon;font-weight:600;">From Date:</span>&nbsp;<input value="" id="datepickerfrom" >
+    </div>
+    <div class="col-md-4">
+        <span style="color:maroon;font-weight:600;">To Date:</span>&nbsp;<input value="" id="datepickerto" >
+    </div>
+</div>    
+
+<div style="padding-top:15px;" class="row">
+    <div class="col-md-4">
+    	<span style="color:maroon;font-weight:600;padding-left:40px;">Client:</span>
+        <select id="clientpicker" ng-model="clients.id" ng-change="getClientProjectList(this.clients.id)">
+        	<option value="0">All</option>
+            <option ng-repeat="client in clients" ng-selected="{{client.id == currentClient}}" value="{{client.id}}">{{client.name}}</option>
+        </select>
+    </div>
+
+    <div class="col-md-4">
+    	<span style="color:maroon;font-weight:600;">Project:</span>
+        <select id="projectpicker" ng-model="projects.id" ng-change="setCurrentProject(this.projects.id)">
+        	<option value="0">All</option>
+            <option ng-repeat="project in projects" ng-selected="{{project.id == currentProject}}" value="{{project.id}}">{{project.name}}</option>
+        </select>
+ 
+        <button style="margin-left:25px;" id="submitDailTime" class="btn btn-xs btn-primary" type="button" data-ng-click="getDailyEntryReviewList()">Go</button>
+    </div>
+</div>    
+</form>
+
+<div id="list" style="padding-top:35px;" class="row">
+    <div class="col-lg-12">
+    <table style="border:1px solid black;width:90%;" >
+        <tr style="background-color:blue;color:white;">
+        	<th style="text-align:center">Date</th>
+        	<th style="text-align:center">Client</th>
+            <th style="text-align:center">Project</th>
+            <th style="text-align:left">Interval</th>
+            <th style="text-align:center">Comments</th>
+        </tr>
+        <tr ng-model="timeDailyEntryReview" ng-repeat="timeDailyEntryReview in timeDailyEntriesReview" >
+            <td name="startimeEntry">{{timeDailyEntryReview.fenterdate}}</td>
+            <td name="startimeEntry">{{timeDailyEntryReview.clientname}}</td>            
+            <td name="stopimeEntry">{{timeDailyEntryReview.projectname}}</td>
+            <td name="intervalEntry">{{timeDailyEntryReview.finterval}}</td>
+            <td name="descriptionEntry">{{timeDailyEntryReview.intervaldescription}}</td>
+        </tr>
+        <tr><td colspan="7">&nbsp;</td>
+        <tr ng-model="timeDailyEntryReviewTotal">
+            <td colspan="3">&nbsp;</td>
+            <td style="text-align:left" id="calulatedTotalInterval">{{timeDailyEntryReviewTotal}}</td>
+            <td colspan=1 >&nbsp;</td>
+        </tr>
+    </table>
+    </div>
+</div>
+</div>

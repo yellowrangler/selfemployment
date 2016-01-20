@@ -1,0 +1,81 @@
+
+<style>
+table tr td {
+    border:1px solid white;
+    padding-left:10px;
+}
+
+.btn :hover {
+    cursor: pointer;
+}
+</style>
+
+<div class="container">
+<div class="row">
+    <div class="col-lg-12">
+        <h2 style="color:maroon;font-weight:900;">Time Daily Entry</h2>
+    </div>
+</div>   
+
+<form id="timeDailyEntryForm" method="post">
+<div style="padding-top:35px;" class="row">
+    <div class="col-lg-12">
+        <span style="color:maroon;font-weight:600;">Date:</span>&nbsp;<input value="" id="datepicker" >
+        <span style="color:maroon;font-weight:600;padding-left:40px;">Client:</span>
+        &nbsp;
+        <select id="clientpicker" ng-model="clients.id" ng-change="getClientProjectList(this.clients.id)">
+            <option ng-repeat="client in clients" ng-selected="{{client.id == currentClient}}" value="{{client.id}}">{{client.name}}</option>
+        </select>
+    </div>
+</div>    
+
+<div style="padding-top:35px;" class="row">
+    <div class="col-md-12">
+        <span style="color:maroon;font-weight:600;">Project:</span>
+         &nbsp;
+         <select id="projectpicker" ng-model="projects.id" ng-change="setCurrentProject(this.projects.id)">
+            <option ng-repeat="project in projects" ng-selected="{{project.id == currentProject}}" value="{{project.id}}">{{project.name}}</option>
+        </select>
+         &nbsp;
+        <time-display classname="" nameid="starttime"  placeholder="Start Time"  size="15" ng-model="newDailyEntry.startTime"></time-display>
+        &nbsp;
+        <time-display classname="" nameid="stoptime" placeholder="Stop Time" ng-model="newDailyEntry.stopTime" ></time-display>
+        &nbsp;
+        <input size="10" id="timeIterval" ng-model="newDailyEntry.timeInterval" type="text" placeholder="Interval">
+    	&nbsp;
+        <input size="45" maxlength="250" id="intervaldescription" ng-model="newDailyEntry.intervaldescription" type="text" placeholder="Interval Description">
+        &nbsp;
+        <button id="submitDailTime" class="btn btn-xs btn-primary" type="button" data-ng-disabled="!newDailyEntry.startTime || !newDailyEntry.stopTime" data-ng-click="insertDailyEntry()">Add Time</button>
+    </div>
+</div>
+</form>
+<div id="list" style="padding-top:35px;" class="row">
+    <div class="col-lg-12">
+    <table style="border:1px solid black;width:90%;" >
+        <tr style="background-color:green;color:white;">
+            <th style="text-align:center">Project</th>
+            <th style="text-align:center">Start Time</th>
+            <th style="text-align:center">End Time</th>
+            <th style="text-align:left">Interval</th>
+            <th style="text-align:center">Comments</th>
+            <th colspan=2 style="text-align:center">&nbsp;</th>
+        </tr>
+        <tr ng-model="timeDailyEntry" ng-repeat="timeDailyEntry in timeDailyEntries" >
+            <td name="startimeEntry">{{timeDailyEntry.projectname}}</td>
+            <td name="startimeEntry">{{timeDailyEntry.fstarttime}}</td>            
+            <td name="stopimeEntry">{{timeDailyEntry.fstoptime}}</td>
+            <td name="intervalEntry">{{timeDailyEntry.finterval}}</td>
+            <td name="descriptionEntry">{{timeDailyEntry.intervaldescription}}</td>
+            <td>&nbsp;</td>
+            <td name="deleteEntry"><span ng-click="deleteTimeEntryDaily(timeDailyEntry.projectdailytimeid)" class="btn glyphicon glyphicon-trash"></span></td>
+        </tr>
+        <tr><td colspan="7">&nbsp;</td>
+        <tr ng-model="timeDailyEntryTotal">
+            <td colspan="3">&nbsp;</td>
+            <td style="text-align:left" id="calulatedTotalInterval">{{timeDailyEntryTotal}}</td>
+            <td colspan=2 >&nbsp;</td>
+        </tr>
+    </table>
+    </div>
+</div>
+</div>

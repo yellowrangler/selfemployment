@@ -1,0 +1,68 @@
+
+<style>
+table tr td {
+    border:1px solid white;
+    padding-left:10px;
+}
+
+.btn :hover {
+    cursor: pointer;
+}
+</style>
+
+<div class="container">
+<div class="row">
+    <div class="col-lg-12">
+        <h2 style="color:maroon;font-weight:900;">Create Invoice</h2>
+    </div>
+</div> 
+
+<form id="createInvoiceForm" method="post">
+<div style="padding-top:35px;" class="row">
+    <div class="col-lg-12">
+        <span style="color:maroon;font-weight:600;">From Date:</span>&nbsp;<input value="" id="datepickerfrom" >
+        &nbsp;
+        <span style="color:maroon;font-weight:600;">To Date:</span>&nbsp;<input value="" id="datepickerto" >
+    </div>
+</div>   
+
+<div style="padding-top:15px;" class="row">
+    <div class="col-lg-12">
+    	<span style="color:maroon;font-weight:600;">Client:</span>
+        &nbsp;
+        <select id="clientpicker" ng-model="clients.id" ng-change="getTimeEntriesForClient(this.clients.id)">
+            <option ng-repeat="client in clients" ng-selected="{{client.id == currentClient}}" value="{{client.id}}">{{client.name}}</option>
+        </select>
+
+        <button style="margin-left:25px;" id="submitShowEntries" class="btn btn-xs btn-primary" type="button" data-ng-click="getTimeEntriesForClient(currentClient)">Show Entries</button>
+    </div>
+</div>  
+</form>
+
+<div id="list" style="padding-top:35px;" class="row">
+    <div class="col-lg-12">
+    <table style="border:1px solid black;width:90%;" >
+        <tr style="background-color:green;color:white;">
+            <th style="text-align:center">Date</th>
+        	<th style="text-align:center">Client</th>
+            <th style="text-align:center">Project</th>
+            <th style="text-align:left">Interval</th>
+            <th style="text-align:center">Comments</th>
+        </tr>
+        <tr ng-model="timeDailyEntryReview" ng-repeat="timeDailyEntryReview in timeDailyEntriesReview" >
+            <td name="startimeEntry">{{timeDailyEntryReview.fenterdate}}</td>
+            <td name="startimeEntry">{{timeDailyEntryReview.clientname}}</td>            
+            <td name="stopimeEntry">{{timeDailyEntryReview.projectname}}</td>
+            <td name="intervalEntry">{{timeDailyEntryReview.finterval}}</td>
+            <td name="descriptionEntry">{{timeDailyEntryReview.intervaldescription}}</td>
+        </tr>
+        <tr><td colspan="7">&nbsp;</td>
+        <tr ng-model="timeDailyEntryReviewTotal">
+            <td colspan="3">&nbsp;</td>
+            <td style="text-align:left" id="calulatedTotalInterval">{{timeDailyEntryReviewTotal}}</td>
+            <td colspan=1 >&nbsp;</td>
+        </tr>
+    </table>
+    </div>
+</div>
+</div>
