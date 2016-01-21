@@ -1,0 +1,22 @@
+.timeHistoryTable {
+    border:1px solid white;
+    padding-left:10px;
+}
+
+.timeHistoryTable tr th {
+    border:3px solid blue;
+}
+
+.timeTable {
+    border:1px solid white;
+    padding-left:10px;
+}
+
+.timeTable tr th {
+    border:3px solid green;
+}
+
+.iconBtn :hover {
+    cursor: pointer;
+    text-align:right;
+}

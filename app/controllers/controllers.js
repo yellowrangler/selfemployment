@@ -50,7 +50,11 @@ controllers.timeentrydailyController = function ($scope, clientServices, project
     $scope.currentProject = "";   
     $scope.timeDailyEntries = "";
     $scope.timeDailyEntryTotal = "0.00";
-        
+
+
+    //
+    // get project lists that are active. But start with last one used
+    //    
     function getClientProjectList(id) 
     {
         $scope.currentClient = id;
@@ -65,6 +69,9 @@ controllers.timeentrydailyController = function ($scope, clientServices, project
             });
     }
 
+    //
+    // get client lists that are active. But start with last one used
+    // 
     function getClientList() 
     {
         // get client list
