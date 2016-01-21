@@ -60,24 +60,27 @@ if (!mysql_select_db($DBschema, $dbConn))
 //---------------------------------------------------------------
 // get patient information using information passed. limit 5 
 //---------------------------------------------------------------
-$sql = "SELECT PDT.id as projectdailytimeid, projectid,
-DATE_FORMAT(enterdate,'%m/%d/%y') as fenterdate,
-PT.name as projectname, CT.name as clientname,
-FORMAT(SUM(timeinterval),2) as finterval,intervaldescription
-FROM projectdailytimetbl PDT 
-LEFT JOIN projecttbl PT ON PT.id = PDT.projectid
-LEFT JOIN clienttbl CT ON CT.id = PT.clientid
-WHERE enterdate >= '$fromdateTS' AND enterdate <= '$todateTS'";
+$sql = "SELECT 
+	PDT.id as projectdailytimeid, 
+	projectid,
+	DATE_FORMAT(enterdate,'%m/%d/%y') as fenterdate,
+	PT.name as projectname, CT.name as clientname,
+	FORMAT(SUM(timeinterval),2) as finterval,
+	intervaldescription
+	FROM projectdailytimetbl PDT 
+	LEFT JOIN projecttbl PT ON PT.id = PDT.projectid
+	LEFT JOIN clienttbl CT ON CT.id = PT.clientid
+	WHERE enterdate >= '$fromdateTS' AND enterdate <= '$todateTS'";
 
-if ($clientid != "0")
-{
-	$sql .= "AND clientid = '$clientid' ";
-}
+	if ($clientid != "0")
+	{
+		$sql .= "AND clientid = '$clientid' ";
+	}
 
-if ($projectid != "0")
-{
-	$sql .= "AND projectid = '$projectid' ";
-}
+	if ($projectid != "0")
+	{
+		$sql .= "AND projectid = '$projectid' ";
+	}
 
 $sql .=  "GROUP BY PT.name, enterdate ORDER BY PT.name";
 

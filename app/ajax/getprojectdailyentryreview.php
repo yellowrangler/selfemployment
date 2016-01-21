@@ -11,15 +11,12 @@ $datetime = date("Y-m-d H:i:s");
 
 $clientid = $_POST["clientid"];
 $projectid = $_POST["projectid"];
-$entrydate = $_POST["entrydate"];
+$fromdate = $_POST["fromdate"];
+$todate = $_POST["todate"];
 
-// create time stamp versions for select
-$entrydateTS = "";
-if ($entrydate != "")
-{
-	$entrydateTS = date("Y-m-d H:i:s", strtotime($entrydate));
-
-}
+// create time stamp versions for insert to mysql
+$fromdateTS = date("Y-m-d H:i:s", strtotime($fromdate));
+$todateTS = date("Y-m-d H:i:s", strtotime($todate));
 
 //
 // messaging
@@ -44,7 +41,7 @@ if (!$dbConn)
 {
 	$log = new ErrorLog("logs/");
 	$dberr = mysql_error();
-	$log->writeLog("DB error: $dberr - Error mysql connect. Unable to get time entry daily project list.");
+	$log->writeLog("DB error: $dberr - Error mysql connect. Unable to get time entry daily project review list.");
 
 	$rv = "";
 	exit($rv);
@@ -54,41 +51,45 @@ if (!mysql_select_db($DBschema, $dbConn))
 {
 	$log = new ErrorLog("logs/");
 	$dberr = mysql_error();
-	$log->writeLog("DB error: $dberr - Error selecting db Unable to get time entry daily project list.");
+	$log->writeLog("DB error: $dberr - Error selecting db Unable to get time entry daily project review list.");
 
 	$rv = "";
 	exit($rv);
 }
 
 //---------------------------------------------------------------
-// get project information using information passed. 
+// get patient information using information passed. limit 5 
 //---------------------------------------------------------------
-$sql = "SELECT 
-	PDT.id as projectdailytimeid, 
-	projectid,enterdate,
-	DATE_FORMAT(starttime,'%h %i %p') AS fstarttime, 
-	DATE_FORMAT(starttime,'%m-%d-%Y') as fstartdate,	
-	PT.name as projectname,
-	DATE_FORMAT(stoptime,'%h %i %p') as fstoptime,
-	DATE_FORMAT(stoptime,'%m-%d-%Y') as fstopdate,
-	FORMAT(timeinterval,2) as finterval,
-	intervaldescription
-	FROM projectdailytimetbl PDT 
-	LEFT JOIN projecttbl PT ON PT.id = PDT.projectid";
+$sql = "SELECT PDT.id as projectdailytimeid, projectid,
+DATE_FORMAT(enterdate,'%m/%d/%y') as fenterdate,
+PT.name as projectname, CT.name as clientname,
+FORMAT(SUM(timeinterval),2) as finterval,intervaldescription
+FROM projectdailytimetbl PDT 
+LEFT JOIN projecttbl PT ON PT.id = PDT.projectid
+LEFT JOIN clienttbl CT ON CT.id = PT.clientid
+WHERE enterdate >= '$fromdateTS' AND enterdate <= '$todateTS'";
 
-	if ($entrydateTS != "")
-	{
-		$sql = $sql . " WHERE enterdate = '$entrydateTS' ";
-	}
-	
-	$sql = $sql . " ORDER BY starttime ASC ";
+if ($clientid != "0")
+{
+	$sql .= "AND clientid = '$clientid' ";
+}
+
+if ($projectid != "0")
+{
+	$sql .= "AND projectid = '$projectid' ";
+}
+
+$sql .=  "GROUP BY PT.name, enterdate ORDER BY PT.name";
+
+// print $sql;
+// die();
 
 $sql_result = @mysql_query($sql, $dbConn);
 if (!$sql_result)
 {
 	$log = new ErrorLog("logs/");
 	$sqlerr = mysql_error();
-	$log->writeLog("SQL error: $sqlerr - Error doing get time entry daily project list select");
+	$log->writeLog("SQL error: $sqlerr - Error doing get time entry daily project review list select");
 	$log->writeLog("SQL: $sql");
 
 	$rv = "";

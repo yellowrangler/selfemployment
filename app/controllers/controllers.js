@@ -154,6 +154,28 @@ controllers.timeentrydailyController = function ($scope, clientServices, project
 
                 nbr = nbr.toFixed(2);
                 $scope.timeDailyEntryTotal = nbr.toString();
+
+                //
+                // now get full project list 
+                //
+                var data = "clientid="+clientid+"&projectid="+projectid+"&entrydate=";
+
+                timeDailyEntryFactory.getDailyTime(data)
+                    .success( function(JSONstr) {
+                        $scope.fullTimeDailyEntries = JSONstr;
+
+                        var nbr = 0;
+                        $.each(JSONstr, function () {
+                             nbr = nbr + parseFloat(this.finterval);
+                        });
+
+                        nbr = nbr.toFixed(2);
+                        $scope.fullTimeDailyEntryTotal = nbr.toString();
+                    })
+                    .error( function(edata) {
+                        alert("Failed ajax to get full time entry history");
+                    });
+
             })
             .error( function(edata) {
                 alert("Failed ajax to get time entry history");

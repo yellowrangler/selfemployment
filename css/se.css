@@ -20,3 +20,8 @@
     cursor: pointer;
     text-align:right;
 }
+
+.inlineDiv {
+	padding:5px 5px 5px 0;
+	display:inline-block;
+}
