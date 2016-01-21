@@ -11,7 +11,7 @@ controllers.dashboardController = function ($scope, $http, $location) {
 
 controllers.administrationController = function ($scope, $http, $location, clientServices, clientFactory) {
     $scope.clients = "";
-    $scope.currentClient = "";
+    $scope.current.client = "";
 
     function getClientList() 
     {
@@ -30,7 +30,7 @@ controllers.administrationController = function ($scope, $http, $location, clien
         var clientObj = clientServices.getCurrentClient();
         if (clientObj != "")
         {
-            $scope.currentClient = clientObj.id;
+            $scope.current.client = clientObj.id;
         }
 
         // get client list
@@ -44,10 +44,15 @@ controllers.administrationController = function ($scope, $http, $location, clien
 }
 
 controllers.timeentrydailyController = function ($scope, clientServices, projectServices, dateServices, clientFactory, projectFactory, timeDailyEntryFactory) {
+    $scope.current = {};
+
     $scope.clients = "";
-    $scope.currentClient = "";
+    $scope.current.client = "";
+    $scope.current.contactname = "NA";
+    $scope.current.contactdeskphone = "NA";
+    $scope.current.contactemail = "NA";        
     $scope.projects = "";
-    $scope.currentProject = "";   
+    $scope.current.project = "";   
     $scope.timeDailyEntries = "";
     $scope.timeDailyEntryTotal = "0.00";
 
@@ -57,10 +62,10 @@ controllers.timeentrydailyController = function ($scope, clientServices, project
     //    
     function getClientProjectList(id) 
     {
-        $scope.currentClient = id;
-        $scope.currentProject = 0;
-        clientServices.addCurrentClient($scope.currentClient,"Clientid");
-        var clientidStr = "clientid="+$scope.currentClient;    
+        $scope.current.client = id;
+        $scope.current.project = 0;
+        clientServices.addCurrentClient($scope.current.client,"Clientid");
+        var clientidStr = "clientid="+$scope.current.client;    
         projectFactory.getClientProjects(clientidStr)
             .success( function(JSONstr) {
                 $scope.projects = JSONstr;
@@ -82,6 +87,10 @@ controllers.timeentrydailyController = function ($scope, clientServices, project
             .success( function(JSONstr) {
                 $scope.clients = JSONstr;
 
+                $scope.current.contactname = "NA";
+                $scope.current.contactdeskphone = "NA";
+                $scope.current.contactemail = "NA";  
+
                 getDailyEntryHistory();
             })
             .error( function (data) {
@@ -90,18 +99,28 @@ controllers.timeentrydailyController = function ($scope, clientServices, project
     }
 
     //set current project
-    function setCurrentProject(id) 
+    function setCurrentProject(projectid) 
     {
-        $scope.currentProject = id;
+        $scope.current.project = projectid;
+        $.each($scope.projects, function (idx, project) {
+            if (project.projectid == projectid)
+            {
+                $scope.current.contactname = project.contactname;
+                $scope.current.contactdeskphone = project.contactdeskphone;
+                $scope.current.contactemail = project.contactemail; 
 
-        projectServices.addCurrentProject($scope.currentProject,"Projectid");
+                return false;
+            }
+        });
+
+        projectServices.addCurrentProject($scope.current.project,"Projectid");
     }
 
     // add new time entry
     function insertDailyEntry()
     {
-        var clientid = $scope.currentClient;
-        var projectid = $scope.currentProject;
+        var clientid = $scope.current.client;
+        var projectid = $scope.current.project;
         var entrydate = $("#datepicker").val();
         var starttime = $("#starttime").val();
         var stoptime = $("#stoptime").val();
@@ -111,17 +130,17 @@ controllers.timeentrydailyController = function ($scope, clientServices, project
         var data = "clientid="+clientid+"&projectid="+projectid+"&entrydate="+entrydate+"&starttime="+starttime+"&stoptime="+stoptime+"&interval="+interval+"&comment="+comment;
 
         timeDailyEntryFactory.addDailyTime(data)
-                .success( function(sdata) {
-                    $("#starttime").val("");
-                    $("#stoptime").val("");
-                    $("#timeIterval").val("");
-                    $("#intervaldescription").val("");
-                    
-                    getDailyEntryHistory();
-                })
-                .error( function(edata) {
-                    alert("Failed ajax to add time entry");
-                });
+            .success( function(sdata) {
+                $("#starttime").val("");
+                $("#stoptime").val("");
+                $("#timeIterval").val("");
+                $("#intervaldescription").val("");
+                
+                getDailyEntryHistory();
+            })
+            .error( function(edata) {
+                alert("Failed ajax to add time entry");
+            });
     }
 
     // delete time entry line item
@@ -131,20 +150,20 @@ controllers.timeentrydailyController = function ($scope, clientServices, project
         var data = "projectdailytimeid="+projectdailytimeid;
 
         timeDailyEntryFactory.deleteDailyTime(data)
-                .success( function(sdata) {
-                    getDailyEntryHistory();
-                })
-                .error( function(edata) {
-                    alert("Failed ajax to delete time entry");
-                });
+            .success( function(sdata) {
+                getDailyEntryHistory();
+            })
+            .error( function(edata) {
+                alert("Failed ajax to delete time entry");
+            });
     }
         
     // get time entries for today
     // add new time entry
     function getDailyEntryHistory()
     {
-        var clientid = $scope.currentClient;
-        var projectid = $scope.currentProject;
+        var clientid = $scope.current.client;
+        var projectid = $scope.current.project;
         var entrydate = $("#datepicker").val();
 
         var data = "clientid="+clientid+"&projectid="+projectid+"&entrydate="+entrydate;
@@ -231,9 +250,9 @@ controllers.timeentrydailyController = function ($scope, clientServices, project
         var clientObj = clientServices.getCurrentClient();
         if (clientObj != "")
         {
-            $scope.currentClient = clientObj.id;
+            $scope.current.client = clientObj.id;
 
-            getClientProjectList($scope.currentClient);
+            getClientProjectList($scope.current.client);
         }
 
         // get client list
@@ -243,10 +262,26 @@ controllers.timeentrydailyController = function ($scope, clientServices, project
         var projectObj = projectServices.getCurrentProject();
         if (projectObj != "")
         {
-            $scope.currentProject = projectObj.id;
+            $scope.current.project = projectObj.id;
+            var data = "projectid="+$scope.current.project;    
+            projectFactory.getClientProject(data)
+                .success( function(JSONstr) {
+                    var project = JSONstr;
 
-            getDailyEntryHistory();
+                    $scope.current.contactname = project.contactname;
+                    $scope.current.contactdeskphone = project.contactdeskphone;
+                    $scope.current.contactemail = project.contactemail; 
+                })
+                .error( function (data) {
+                    alert("Error "+data);
+                });
         }
+
+        //
+        // redo list
+        //
+        getDailyEntryHistory();
+        
     };
 
     // project list
@@ -277,20 +312,21 @@ controllers.timeentrydailyController = function ($scope, clientServices, project
 }
 
 controllers.timeentryreviewController = function ($scope, $http, $location, clientServices, projectServices, dateServices, clientFactory, projectFactory, timeDailyEntryFactory) {
+    $scope.current = {};
 
     $scope.clients = "";
-    $scope.currentClient = "";
+    $scope.current.client = "";
     $scope.projects = "";
-    $scope.currentProject = "";   
+    $scope.current.project = "";   
     $scope.timeDailyEntriesReview = "";
     $scope.timeDailyEntryReviewTotal = "0.00";
 
         
     function getClientProjectList(id) 
     {
-        $scope.currentClient = id;
-        clientServices.addCurrentClient($scope.currentClient,"Clientid");
-        var clientidStr = "clientid="+$scope.currentClient;    
+        $scope.current.client = id;
+        clientServices.addCurrentClient($scope.current.client,"Clientid");
+        var clientidStr = "clientid="+$scope.current.client;    
         projectFactory.getClientProjects(clientidStr)
             .success( function(JSONstr) {
                 $scope.projects = JSONstr;
@@ -313,10 +349,11 @@ controllers.timeentryreviewController = function ($scope, $http, $location, clie
     }
 
     //set current project
-    function setCurrentProject(id) 
+    function setCurrentProject(projectid) 
     {
-        $scope.currentProject = id;
-        projectServices.addCurrentProject($scope.currentProject,"Projectid");
+        $scope.current.project = projectid;
+        
+        projectServices.addCurrentProject($scope.current.project,"Projectid");
     }
 
         
@@ -324,8 +361,8 @@ controllers.timeentryreviewController = function ($scope, $http, $location, clie
     // add new time entry
     function getDailyEntryHistoryReview()
     {
-        var clientid = $scope.currentClient;
-        var projectid = $scope.currentProject;
+        var clientid = $scope.current.client;
+        var projectid = $scope.current.project;
         var fromdate = $("#datepickerfrom").val();
         var todate = $("#datepickerto").val();
 
@@ -380,8 +417,8 @@ controllers.timeentryreviewController = function ($scope, $http, $location, clie
         var clientObj = clientServices.getCurrentClient();
         if (clientObj != "")
         {
-            $scope.currentClient = clientObj.id;
-            getClientProjectList($scope.currentClient);
+            $scope.current.client = clientObj.id;
+            getClientProjectList($scope.current.client);
         }
 
         // get client list
@@ -391,7 +428,7 @@ controllers.timeentryreviewController = function ($scope, $http, $location, clie
         var projectObj = projectServices.getCurrentProject();
         if (projectObj != "")
         {
-            $scope.currentProject = projectObj.id;
+            $scope.current.project = projectObj.id;
         }
     };
 
@@ -414,7 +451,7 @@ controllers.timeentryreviewController = function ($scope, $http, $location, clie
 
 controllers.invoicesController = function ($scope, $http, $location, clientServices, projectServices, dateServices, clientFactory, projectFactory, timeDailyEntryFactory) {
     $scope.clients = "";
-    $scope.currentClient = "";
+    $scope.current.client = "";
     $scope.timeDailyEntriesReview = "";
     $scope.timeDailyEntryReviewTotal = "0.00";
 
@@ -435,10 +472,10 @@ controllers.invoicesController = function ($scope, $http, $location, clientServi
     {
         if (id != "")
         {
-            $scope.currentClient  = id;
+            $scope.current.client  = id;
         }
 
-        var clientid = $scope.currentClient ;
+        var clientid = $scope.current.client ;
         var projectid = 0;
         var fromdate = $("#datepickerfrom").val();
         var todate = $("#datepickerto").val();
@@ -494,7 +531,7 @@ controllers.invoicesController = function ($scope, $http, $location, clientServi
         var clientObj = clientServices.getCurrentClient();
         if (clientObj != "")
         {
-            $scope.currentClient = clientObj.id;
+            $scope.current.client = clientObj.id;
         }
         getClientList();
     }
@@ -507,7 +544,7 @@ controllers.invoicesController = function ($scope, $http, $location, clientServi
 
 controllers.adminclientsController = function ($scope, $http, $location, clientServices, clientFactory, stateService, clientStatusService) {
     $scope.clients = "";
-    $scope.currentClient = "";
+    $scope.current.client = "";
     $scope.clientdetails = "";
 
     // functions to call in controller
@@ -526,7 +563,7 @@ controllers.adminclientsController = function ($scope, $http, $location, clientS
     // functions to call in controller
     function getClientDetails(clientid) 
     {
-        $scope.currentClient = clientid;
+        $scope.current.client = clientid;
         clientServices.addCurrentClient(clientid,"Clientid");
 
         var data = "clientid="+clientid;
@@ -544,8 +581,8 @@ controllers.adminclientsController = function ($scope, $http, $location, clientS
     function clearClientDetails()
     {
         $scope.clientdetails = "";
-        $scope.currentClient = 0;
-        clientServices.addCurrentClient($scope.currentClient,"Clientid");
+        $scope.current.client = 0;
+        clientServices.addCurrentClient($scope.current.client,"Clientid");
         $("#clientid").val("0");
     }
 
@@ -573,9 +610,9 @@ controllers.adminclientsController = function ($scope, $http, $location, clientS
         var clientObj = clientServices.getCurrentClient();
         if (clientObj != "")
         {
-            $scope.currentClient = clientObj.id;
+            $scope.current.client = clientObj.id;
 
-            getClientDetails($scope.currentClient);
+            getClientDetails($scope.current.client);
         }
 
         getClientList();

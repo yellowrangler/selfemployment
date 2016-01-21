@@ -9,7 +9,7 @@ include ('../class/class.AccessLog.php');
 //
 $datetime = date("Y-m-d H:i:s");
 
-$clientid = $_POST["clientid"];
+$projectid = $_POST["projectid"];
 
 //
 // messaging
@@ -63,7 +63,7 @@ mobilephone as contactmobilephone,
 email as contactemail
 FROM projecttbl P
 LEFT JOIN contactstbl C ON C.id = P.contactid
-WHERE P.clientid = $clientid";
+WHERE P.id = $projectid";
 
 $sql_result = @mysql_query($sql, $dbConn);
 if (!$sql_result)
@@ -77,14 +77,7 @@ if (!$sql_result)
 	exit($rv);
 }
 
-$count = mysql_num_rows($sql_result);
-if ($count > 0)
-{
-	$rows = array();
-	while($row = mysql_fetch_assoc($sql_result)) {
-	    $results[] = $row;
-	}
-}
+$result = mysql_fetch_assoc($sql_result);
 
 //
 // close db connection
@@ -101,6 +94,6 @@ mysql_close($dbConn);
 //
 if ($count > 0)
 {
-	exit(json_encode($results));
+	exit(json_encode($result));
 }
 ?>

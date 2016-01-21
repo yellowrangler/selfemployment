@@ -45,6 +45,15 @@ seApp.factory('projectFactory', function($q, $http) {
         })
     }
 
+    factory.getClientProject = function (data) {
+        return $http({ 
+            method: 'POST', 
+            url: "app/ajax/getclientproject.php",
+            data: data,
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+        })
+    }
+
     return factory;
 
 });

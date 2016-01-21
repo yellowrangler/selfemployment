@@ -16,16 +16,32 @@
             <span style="color:maroon;font-weight:600;">Client</span>
 
             <select id="clientpicker" ng-model="clients.id" ng-change="getClientProjectList(this.clients.id)">
-                <option ng-repeat="client in clients" ng-selected="{{client.id == currentClient}}" value="{{client.id}}">{{client.name}}</option>
+                <option ng-repeat="client in clients" ng-selected="{{client.id == current.client}}" value="{{client.id}}">{{client.name}}</option>
             </select>
         </div>
 
         <div class="inlineDiv">
             <span style="color:maroon;font-weight:600;">Project</span>
 
-             <select id="projectpicker" ng-model="projects.id" ng-change="setCurrentProject(this.projects.id)">
-                <option ng-repeat="project in projects" ng-selected="{{project.id == currentProject}}" value="{{project.id}}">{{project.name}}</option>
+             <select id="projectpicker" ng-model="projects.projectid" ng-change="setCurrentProject(this.projects.projectid)">
+                <option ng-repeat="project in projects" ng-selected="{{project.projectid == current.project}}" value="{{project.projectid}}">{{project.projectname}}</option>
             </select>
+        </div>
+    </div>
+</div>    
+
+<div style="padding-top:35px;" class="row">
+    <div class="col-lg-12">
+        <div class="inlineDiv">
+            <span style="color:maroon;font-weight:600;">Contact</span>&nbsp;{{current.contactname}}
+        </div>
+        
+        <div class="inlineDiv">    
+            <span style="color:maroon;font-weight:600;">Phone</span>&nbsp;{{current.contactdeskphone}}
+        </div>
+
+        <div class="inlineDiv">    
+            <span style="color:maroon;font-weight:600;">eMail</span>&nbsp;{{current.contactemail}}
         </div>
     </div>
 </div>    
