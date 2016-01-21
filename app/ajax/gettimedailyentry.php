@@ -74,13 +74,14 @@ $sql = "SELECT
 	FORMAT(timeinterval,2) as finterval,
 	intervaldescription
 	FROM projectdailytimetbl PDT 
-	LEFT JOIN projecttbl PT ON PT.id = PDT.projectid";
+	LEFT JOIN projecttbl PT ON PT.id = PDT.projectid
+	WHERE PDT.projectid = $projectid ";
 
 	if ($entrydateTS != "")
 	{
-		$sql = $sql . " WHERE enterdate = '$entrydateTS' ";
+		$sql = $sql . " AND enterdate = '$entrydateTS' ";
 	}
-	
+
 	$sql = $sql . " ORDER BY starttime ASC ";
 
 $sql_result = @mysql_query($sql, $dbConn);

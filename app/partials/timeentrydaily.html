@@ -56,13 +56,13 @@
 </form>
 
 <div id="list" style="padding-top:35px;" class="row">
-    <div class="col-lg-6">
+    <div class="col-lg-7">
         <table style="width:90%;" class="timeTable">
             <tr style="background-color:green;color:white;">
                 <th>Project</th>
-                <th>Start Time</th>
-                <th>End Time</th>
-                <th>Interval</th>
+                <th>Start</th>
+                <th>End</th>
+                <th>Time</th>
                 <th colspan=2 style="text-align:center">Comments</th>
                 <th>&nbsp;</th>
             </tr>
@@ -70,22 +70,22 @@
                 <td name="projectNameEntry">{{timeDailyEntry.projectname}}</td>
                 <td name="startimeEntry">{{timeDailyEntry.fstarttime}}</td>            
                 <td name="stopimeEntry">{{timeDailyEntry.fstoptime}}</td>
-                <td name="intervalEntry">{{timeDailyEntry.finterval}}</td>
-                <td name="descriptionEntry">{{timeDailyEntry.intervaldescription}}</td>
+                <td name="intervalEntry" style="text-align:right">{{timeDailyEntry.finterval}}</td>
+                <td name="descriptionEntry" style="padding-left:5px;">{{timeDailyEntry.intervaldescription}}</td>
                 <td>&nbsp;</td>
-                <td name="deleteEntry"><span ng-click="deleteTimeEntryDaily(timeDailyEntry.projectdailytimeid)" class="iconBtn glyphicon glyphicon-trash"></span>
+                <td class="iconBtn" name="deleteEntry"><span ng-click="deleteTimeEntryDaily(timeDailyEntry.projectdailytimeid)" class="glyphicon glyphicon-trash"></span>
                 </td>
             </tr>
             <tr><td colspan="7">&nbsp;</td>
             <tr ng-model="timeDailyEntryTotal">
                 <td colspan="3">&nbsp;</td>
-                <td style="text-align:left" id="calulatedTotalInterval">{{timeDailyEntryTotal}}</td>
+                <td style="text-align:right" id="calulatedTotalInterval">{{timeDailyEntryTotal}}</td>
                 <td colspan=2 >&nbsp;</td>
             </tr>
         </table>
     </div>
 
-    <div class="col-lg-6">
+    <div class="col-lg-5">
         <table style="width:90%;" class="timeHistoryTable">
             <tr style="background-color:blue;color:white;">
                 <th>Project</th>
@@ -96,13 +96,13 @@
             <tr ng-model="timeDailyEntry" ng-repeat="fullTimeDailyEntry in fullTimeDailyEntries" >
                 <td name="projectNameEntry">{{fullTimeDailyEntry.projectname}}</td>
                 <td name="dateEntry">{{fullTimeDailyEntry.fstopdate}}</td>            
-                <td name="intervalEntry">{{fullTimeDailyEntry.finterval}}</td>
-                <td name="descriptionEntry">{{fullTimeDailyEntry.intervaldescription}}</td>
+                <td name="intervalEntry" style="text-align:right;">{{fullTimeDailyEntry.finterval}}</td>
+                <td name="descriptionEntry" style="padding-left:5px;">{{fullTimeDailyEntry.intervaldescription}}</td>
             </tr>
             <tr><td colspan="7">&nbsp;</td>
             <tr ng-model="timeDailyEntryTotal">
                 <td colspan="2">&nbsp;</td>
-                <td style="text-align:left" id="calulatedTotalInterval">{{fullTimeDailyEntryTotal}}</td>
+                <td style="text-align:right;" id="calulatedTotalInterval">{{fullTimeDailyEntryTotal}}</td>
                 <td colspan=2 >&nbsp;</td>
             </tr>
         </table>

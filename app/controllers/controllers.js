@@ -58,11 +58,14 @@ controllers.timeentrydailyController = function ($scope, clientServices, project
     function getClientProjectList(id) 
     {
         $scope.currentClient = id;
+        $scope.currentProject = 0;
         clientServices.addCurrentClient($scope.currentClient,"Clientid");
         var clientidStr = "clientid="+$scope.currentClient;    
         projectFactory.getClientProjects(clientidStr)
             .success( function(JSONstr) {
                 $scope.projects = JSONstr;
+
+                getDailyEntryHistory();
             })
             .error( function (data) {
                 alert("Error "+data);
@@ -78,6 +81,8 @@ controllers.timeentrydailyController = function ($scope, clientServices, project
         clientFactory.getClients()
             .success( function(JSONstr) {
                 $scope.clients = JSONstr;
+
+                getDailyEntryHistory();
             })
             .error( function (data) {
                 alert("Error "+data);
@@ -88,6 +93,7 @@ controllers.timeentrydailyController = function ($scope, clientServices, project
     function setCurrentProject(id) 
     {
         $scope.currentProject = id;
+
         projectServices.addCurrentProject($scope.currentProject,"Projectid");
     }
 
@@ -205,7 +211,7 @@ controllers.timeentrydailyController = function ($scope, clientServices, project
         {
             $("#datepicker").val(dateServices.getCurrentDateForDisplay());
 
-            getDailyEntryHistory();
+            // getDailyEntryHistory();
         }
 
         // time stuff
@@ -226,6 +232,7 @@ controllers.timeentrydailyController = function ($scope, clientServices, project
         if (clientObj != "")
         {
             $scope.currentClient = clientObj.id;
+
             getClientProjectList($scope.currentClient);
         }
 
@@ -237,6 +244,7 @@ controllers.timeentrydailyController = function ($scope, clientServices, project
         if (projectObj != "")
         {
             $scope.currentProject = projectObj.id;
+
             getDailyEntryHistory();
         }
     };
@@ -244,11 +252,15 @@ controllers.timeentrydailyController = function ($scope, clientServices, project
     // project list
     $scope.getClientProjectList = function (id) {
         getClientProjectList(id);
+
+        getDailyEntryHistory();
     }
 
     //set current project
     $scope.setCurrentProject = function (id) {
         setCurrentProject(id);
+
+        getDailyEntryHistory();
     }
 
     // add new time entry
