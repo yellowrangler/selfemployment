@@ -92,8 +92,6 @@ mysql_close($dbConn);
 //
 // pass back info
 //
-if ($count > 0)
-{
-	exit(json_encode($result));
-}
+exit(json_encode($result));
+
 ?>

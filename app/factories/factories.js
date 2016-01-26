@@ -70,6 +70,15 @@ seApp.factory('timeDailyEntryFactory', function($q, $http) {
         })
     }
 
+    factory.updateDailyTime = function (data) {
+        return $http({ 
+            method: 'POST', 
+            url: "app/ajax/updatetimedailyentry.php",
+            data: data,
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+        })
+    }
+
     factory.getDailyTime = function (data) {
         return $http({ 
             method: 'POST', 

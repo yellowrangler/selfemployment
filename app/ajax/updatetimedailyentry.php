@@ -13,6 +13,7 @@ $datetime = date("Y-m-d H:i:s");
 // die();
 
 // get post values
+$projectdailytimeid = $_POST["projectdailytimeid"];
 $projectid = $_POST["projectid"];
 $entrydate = $_POST["entrydate"];
 $starttime = $_POST["starttime"];
@@ -62,6 +63,7 @@ if (!mysql_select_db($DBschema, $dbConn))
 // create time stamp versions for insert to mysql
 $entrydateTS = date("Y-m-d H:i:s", strtotime($entrydate));
 $starttimeTS = date("Y-m-d H:i:s", strtotime($entrydate." ".$starttime));
+$starttimeTS = date("Y-m-d H:i:s", strtotime($entrydate." ".$starttime));
 $stoptimeTS = "";
 if ($stoptime != "")
 {
@@ -71,23 +73,19 @@ if ($stoptime != "")
 //---------------------------------------------------------------
 // add daily time entered using information passed. 
 //---------------------------------------------------------------
-$sql = "INSERT INTO projectdailytimetbl 
-	(projectid,enterdate,starttime,";
+$sql = "UPDATE projectdailytimetbl 
+	SET projectid = $projectid,	
+	enterdate ='$entrydateTS',
+	starttime = '$starttimeTS',";
 
-if ($stoptimeTS != "")	
-{
-	$sql = $sql . "stoptime,";
-}
-		
-$sql = $sql . "timeinterval,intervaldescription)
-	VALUES ($projectid,'$entrydateTS','$starttimeTS',";
+	if ($stoptimeTS != "")	
+	{
+		$sql = $sql . "stoptime = '$stoptimeTS',";
+	}	
 
-if ($stoptimeTS != "")	
-{
-	$sql = $sql . "'$stoptimeTS',";
-}	
-
-$sql = $sql . "$interval,'$comment')";
+$sql = $sql ."timeinterval = $interval,
+	intervaldescription = '$comment'
+	WHERE id = $projectdailytimeid";
 
 // print $sql;
 

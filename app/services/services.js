@@ -119,7 +119,7 @@ seApp.service('dateServices', function () {
 
         var millisecndsDiff = timeEnd - timeStart;  
         var hoursMinutesDiff = millisecndsDiff / hour;
-        var roundedValue = Math.round(hoursMinutesDiff * 10)/10;
+        var roundedValue = Math.round(hoursMinutesDiff * 100)/100;
 
         return roundedValue.toFixed(2);
     }

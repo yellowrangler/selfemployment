@@ -1,7 +1,7 @@
 <div class="container">
 <div class="row">
     <div class="col-lg-12">
-        <h2 style="color:maroon;font-weight:900;">Time Daily Entry</h2>
+        <div style="color:teal;font-weight:600;letter-spacing:3px;font-size:18px;">Time Daily Entry</div>
     </div>
 </div>   
 
@@ -9,21 +9,21 @@
 <div style="padding-top:35px;" class="row">
     <div class="col-lg-12">
         <div class="inlineDiv">
-            <span style="color:maroon;font-weight:600;">Date:</span>&nbsp;<input value="" id="datepicker" >
+            <span ng-model="current.timeEntryDate" style="color:lightgrey;font-weight:600;">Date:</span>&nbsp;<input value="" id="datepicker" >
         </div>
         
         <div class="inlineDiv">    
-            <span style="color:maroon;font-weight:600;">Client</span>
+            <span style="color:lightgrey;font-weight:600;">Client</span>
 
-            <select id="clientpicker" ng-model="clients.id" ng-change="getClientProjectList(this.clients.id)">
+            <select id="clientpicker" class="customSelect" ng-model="clients.id" ng-change="getClientProjectList(this.clients.id)">
                 <option ng-repeat="client in clients" ng-selected="{{client.id == current.client}}" value="{{client.id}}">{{client.name}}</option>
             </select>
         </div>
 
         <div class="inlineDiv">
-            <span style="color:maroon;font-weight:600;">Project</span>
+            <span style="color:lightgrey;font-weight:600;">Project</span>
 
-             <select id="projectpicker" ng-model="projects.projectid" ng-change="setCurrentProject(this.projects.projectid)">
+             <select id="projectpicker" class="customSelect" ng-model="projects.projectid" ng-change="setCurrentProject(this.projects.projectid)">
                 <option ng-repeat="project in projects" ng-selected="{{project.projectid == current.project}}" value="{{project.projectid}}">{{project.projectname}}</option>
             </select>
         </div>
@@ -33,15 +33,15 @@
 <div style="padding-top:35px;" class="row">
     <div class="col-lg-12">
         <div class="inlineDiv">
-            <span style="color:maroon;font-weight:600;">Contact</span>&nbsp;{{current.contactname}}
+            <span style="color:lightgrey;font-weight:600;">Contact</span>&nbsp;{{current.contactname}}
         </div>
         
         <div class="inlineDiv">    
-            <span style="color:maroon;font-weight:600;">Phone</span>&nbsp;{{current.contactdeskphone}}
+            <span style="color:lightgrey;font-weight:600;">Phone</span>&nbsp;{{current.contactdeskphone}}
         </div>
 
         <div class="inlineDiv">    
-            <span style="color:maroon;font-weight:600;">eMail</span>&nbsp;{{current.contactemail}}
+            <span style="color:lightgrey;font-weight:600;">eMail</span>&nbsp;{{current.contactemail}}
         </div>
     </div>
 </div>    
@@ -61,11 +61,14 @@
         </div>
 
         <div class="inlineDiv">
-            <input size="45" maxlength="250" id="intervaldescription" ng-model="newDailyEntry.intervaldescription" type="text" placeholder="Interval Description">
+            <input size="45" maxlength="250" id="intervaldescription" ng-model="newDailyEntry.intervalDescription" type="text" placeholder="Interval Description">
         </div>
 
         <div class="inlineDiv">
-            <button id="submitDailTime" class="btn btn-xs btn-primary" type="button" data-ng-disabled="!newDailyEntry.startTime || !newDailyEntry.stopTime" data-ng-click="insertDailyEntry()">+</button>
+            <button id="submitDailTime" class="btn btn-xs btn-primary" type="button" data-ng-disabled="!newDailyEntry.startTime" data-ng-click="insertUpdateDailyEntry(newDailyEntry.projectdailytimeid)">{{current.timeEntryActionButton}}</button>
+            &nbsp;
+            <button id="submitDailTime" class="btn btn-xs btn-primary" type="button" data-ng-if="newDailyEntry.projectdailytimeid > 0" data-ng-click="clearDailyEntry()">Clear</button>
+            <input id="projectdailytimeid" ng-model="newDailyEntry.projectdailytimeid" value="{{newDailyEntry.projectdailytimeid}}" type="hidden">
         </div>
     </div>
 </div>
@@ -75,27 +78,27 @@
     <div class="col-lg-7">
         <table style="width:90%;" class="timeTable">
             <tr style="background-color:green;color:white;">
-                <th>Project</th>
                 <th>Start</th>
                 <th>End</th>
                 <th>Time</th>
                 <th colspan=2 style="text-align:center">Comments</th>
                 <th>&nbsp;</th>
             </tr>
-            <tr ng-model="timeDailyEntry" ng-repeat="timeDailyEntry in timeDailyEntries" >
-                <td name="projectNameEntry">{{timeDailyEntry.projectname}}</td>
+            <tr ng-click="editTimeEntryDaily(timeDailyEntry.projectdailytimeid)" ng-model="timeDailyEntry" ng-repeat="timeDailyEntry in timeDailyEntries" class="SeelectableTR">
                 <td name="startimeEntry">{{timeDailyEntry.fstarttime}}</td>            
                 <td name="stopimeEntry">{{timeDailyEntry.fstoptime}}</td>
-                <td name="intervalEntry" style="text-align:right">{{timeDailyEntry.finterval}}</td>
+                <td name="intervalEntry" style="text-align:center">{{timeDailyEntry.finterval}}</td>
                 <td name="descriptionEntry" style="padding-left:5px;">{{timeDailyEntry.intervaldescription}}</td>
-                <td>&nbsp;</td>
+                <td>&nbsp;
+                <input name="projectdailytimeidhidden" ng-model="timeDailyEntry.projectdailytimeid" value="{{timeDailyEntry.projectdailytimeid}}" type="hidden">
+                </td>
                 <td class="iconBtn" name="deleteEntry"><span ng-click="deleteTimeEntryDaily(timeDailyEntry.projectdailytimeid)" class="glyphicon glyphicon-trash"></span>
                 </td>
             </tr>
-            <tr><td colspan="7">&nbsp;</td>
+            <tr><td colspan="6">&nbsp;</td>
             <tr ng-model="timeDailyEntryTotal">
-                <td colspan="3">&nbsp;</td>
-                <td style="text-align:right" id="calulatedTotalInterval">{{timeDailyEntryTotal}}</td>
+                <td colspan="2">&nbsp;</td>
+                <td style="text-align:center" id="calulatedTotalInterval">{{timeDailyEntryTotal}}</td>
                 <td colspan=2 >&nbsp;</td>
             </tr>
         </table>
@@ -104,22 +107,20 @@
     <div class="col-lg-5">
         <table style="width:90%;" class="timeHistoryTable">
             <tr style="background-color:blue;color:white;">
-                <th>Project</th>
                 <th>Date</th>
                 <th>Time</th>
-                <th colspan=2 style="text-align:center">Comments</th>
+                <th style="text-align:center">Comments</th>
             </tr>
             <tr ng-model="timeDailyEntry" ng-repeat="fullTimeDailyEntry in fullTimeDailyEntries" >
-                <td name="projectNameEntry">{{fullTimeDailyEntry.projectname}}</td>
                 <td name="dateEntry">{{fullTimeDailyEntry.fstopdate}}</td>            
-                <td name="intervalEntry" style="text-align:right;">{{fullTimeDailyEntry.finterval}}</td>
+                <td name="intervalEntry" style="text-align:center;">{{fullTimeDailyEntry.finterval}}</td>
                 <td name="descriptionEntry" style="padding-left:5px;">{{fullTimeDailyEntry.intervaldescription}}</td>
             </tr>
-            <tr><td colspan="7">&nbsp;</td>
+            <tr><td colspan="3">&nbsp;</td>
             <tr ng-model="timeDailyEntryTotal">
-                <td colspan="2">&nbsp;</td>
-                <td style="text-align:right;" id="calulatedTotalInterval">{{fullTimeDailyEntryTotal}}</td>
-                <td colspan=2 >&nbsp;</td>
+                <td >&nbsp;</td>
+                <td style="text-align:center;" id="calulatedTotalInterval">{{fullTimeDailyEntryTotal}}</td>
+                <td>&nbsp;</td>
             </tr>
         </table>
     </div>

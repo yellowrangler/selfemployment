@@ -21,8 +21,18 @@
     text-align:right;
 }
 
+.SeelectableTR :hover {
+    cursor: pointer;
+}
+
 .inlineDiv {
-	padding:5px 5px 5px 0;
+	padding:5px 45px 5px 0;
 	display:inline-block;
-	font-size:14px;
+	font-size:16px;
+}
+
+.customSelect {
+   background: #d7fbfd;
+   color:#000;
+   font-size:16px;
 }

@@ -45,7 +45,10 @@ controllers.administrationController = function ($scope, $http, $location, clien
 
 controllers.timeentrydailyController = function ($scope, clientServices, projectServices, dateServices, clientFactory, projectFactory, timeDailyEntryFactory) {
     $scope.current = {};
-
+    $scope.newDailyEntry = {};
+    $scope.newDailyEntry.projectdailytimeid = "";
+    $scope.current.timeEntryDate = "";
+    $scope.current.timeEntryActionButton = "";    
     $scope.clients = "";
     $scope.current.client = "";
     $scope.current.contactname = "NA";
@@ -117,30 +120,83 @@ controllers.timeentrydailyController = function ($scope, clientServices, project
     }
 
     // add new time entry
-    function insertDailyEntry()
+    function insertUpdateDailyEntry(projectdailytimeid)
     {
         var clientid = $scope.current.client;
         var projectid = $scope.current.project;
-        var entrydate = $("#datepicker").val();
-        var starttime = $("#starttime").val();
-        var stoptime = $("#stoptime").val();
-        var interval = $("#timeIterval").val();
-        var comment = $("#intervaldescription").val();
+        var entrydate = $scope.current.timeEntryDate;
+        var starttime = $scope.newDailyEntry.startTime;
+        var stoptime = $scope.newDailyEntry.stopTime;
+        var interval = $scope.newDailyEntry.timeInterval;
+        var comment = $scope.newDailyEntry.intervalDescription;
 
-        var data = "clientid="+clientid+"&projectid="+projectid+"&entrydate="+entrydate+"&starttime="+starttime+"&stoptime="+stoptime+"&interval="+interval+"&comment="+comment;
+        if ($scope.current.timeEntryActionButton == "Add")
+        {
+            if (interval == "")
+            {
+                interval = 0; 
+            }
 
-        timeDailyEntryFactory.addDailyTime(data)
-            .success( function(sdata) {
-                $("#starttime").val("");
-                $("#stoptime").val("");
-                $("#timeIterval").val("");
-                $("#intervaldescription").val("");
+            var data = "projectid="+projectid+"&entrydate="+entrydate+"&starttime="+starttime+"&stoptime="+stoptime+"&interval="+interval+"&comment="+comment;
+
+
+            timeDailyEntryFactory.addDailyTime(data)
+                .success( function(sdata) {
+                    clearDailyEntry();
+                    
+                    getDailyEntryHistory();
+                })
+                .error( function(edata) {
+                    alert("Failed ajax to add time entry");
+                });
+        } 
+        else
+        {
+            var data = "projectdailytimeid="+projectdailytimeid+"&projectid="+projectid+"&entrydate="+entrydate+"&starttime="+starttime+"&stoptime="+stoptime+"&interval="+interval+"&comment="+comment;
+
+
+            timeDailyEntryFactory.updateDailyTime(data)
+                .success( function(sdata) {
+                    clearDailyEntry();
+                    
+                    getDailyEntryHistory();
+                })
+                .error( function(edata) {
+                    alert("Failed ajax to update time entry");
+                });
+        }
+            
+    }
+
+    function clearDailyEntry ()
+    {
+        $scope.current.timeEntryActionButton = "Add";
+
+        $scope.newDailyEntry.startTime = "";
+        $scope.newDailyEntry.stopTime = "";
+        $scope.newDailyEntry.timeInterval = "";
+        $scope.newDailyEntry.intervalDescription = "";
+        $scope.newDailyEntry.projectdailytimeid = "";
+    }
+
+    // set input fields for edit of time entry line item
+    function editTimeEntryDaily(projectdailytimeid)
+    {
+        $.each($scope.timeDailyEntries, function (idx, timeentries) {
+            if (timeentries.projectdailytimeid == projectdailytimeid)
+            {
+                $scope.newDailyEntry.startTime = simpleTimeFormat(timeentries.fstarttime);
+                $scope.newDailyEntry.stopTime = simpleTimeFormat(timeentries.fstoptime);
+                $scope.newDailyEntry.timeInterval = timeentries.finterval;
+                $scope.newDailyEntry.intervalDescription = timeentries.intervaldescription;
+                $scope.newDailyEntry.projectdailytimeid = timeentries.projectdailytimeid;
+
+                return false;
+            }
+        });
+
+        $scope.current.timeEntryActionButton = "Update";
                 
-                getDailyEntryHistory();
-            })
-            .error( function(edata) {
-                alert("Failed ajax to add time entry");
-            });
     }
 
     // delete time entry line item
@@ -164,7 +220,7 @@ controllers.timeentrydailyController = function ($scope, clientServices, project
     {
         var clientid = $scope.current.client;
         var projectid = $scope.current.project;
-        var entrydate = $("#datepicker").val();
+        var entrydate = $scope.current.timeEntryDate;
 
         var data = "clientid="+clientid+"&projectid="+projectid+"&entrydate="+entrydate;
 
@@ -209,38 +265,43 @@ controllers.timeentrydailyController = function ($scope, clientServices, project
     
     init();
     function init() {
+        // some initial clean up and set up
+        clearDailyEntry();
+
         // date stuff
         $( "#datepicker" ).datepicker();
 
         $( "#datepicker" ).change(function() {
-            if ($("#datepicker").val() == "")
+            $scope.current.timeEntryDate = $("#datepicker").val();
+            if ($scope.current.timeEntryDate == "")
             {
-                $("#datepicker").val(dateServices.getCurrentDateForDisplay());
+                $scope.current.timeEntryDate = dateServices.getCurrentDateForDisplay();
+                $("#datepicker").val($scope.current.timeEntryDate);
             }
             
-            $("#starttime").val("");
-            $("#stoptime").val("");
-            $("#timeIterval").val("");
-            $("#intervaldescription").val("");
+            clearDailyEntry();
 
             getDailyEntryHistory();
         });
 
-        if ($("#datepicker").val() == "")
+        if ($scope.current.timeEntryDate == "")
         {
-            $("#datepicker").val(dateServices.getCurrentDateForDisplay());
+            $scope.current.timeEntryDate = dateServices.getCurrentDateForDisplay();
+            $("#datepicker").val($scope.current.timeEntryDate);
 
             // getDailyEntryHistory();
         }
 
         // time stuff
         $("#timeIterval").focus(function() {
-            var starttime = $("#starttime").val();
-            var stoptime = $("#stoptime").val();
+            var starttime = $scope.newDailyEntry.startTime;
+            var stoptime = $scope.newDailyEntry.stopTime;
             if (starttime != "" && stoptime != "")
             {
                 var tdiff = dateServices.getTimeDifference(starttime, stoptime);
-                $("#timeIterval").val(tdiff);
+                $scope.newDailyEntry.timeInterval = tdiff;
+
+                $scope.$digest();
 
                 return false;
             }
@@ -298,10 +359,21 @@ controllers.timeentrydailyController = function ($scope, clientServices, project
         getDailyEntryHistory();
     }
 
-    // add new time entry
-    $scope.insertDailyEntry = function ()
+    // clear daily entry
+    $scope.clearDailyEntry = function () {
+        clearDailyEntry();
+    }
+
+    // edit timedailyentry
+    $scope.editTimeEntryDaily = function (projectdailytimeid)
     {
-        insertDailyEntry();
+        editTimeEntryDaily(projectdailytimeid);
+    }
+
+    // add new time entry
+    $scope.insertUpdateDailyEntry = function (id)
+    {
+        insertUpdateDailyEntry(id);
     }
 
     // delete the time entry daily
