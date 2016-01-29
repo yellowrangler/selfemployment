@@ -63,44 +63,37 @@ if (!mysql_select_db($DBschema, $dbConn))
 
 //---------------------------------------------------------------
 // add or update patient information using information passed. 
-// if clientid = 0 insert else update
+// if clientid = null insert else update
 //---------------------------------------------------------------
 
 $sql = "";
 
-if ($clientid == 0)
+if ($clientid == "")
 {
 	//--------------------------------------
 	// we are an add
-	// first add to address table 
-	// then get address id
-	// then add to client table
 	//--------------------------------------
-	$sql = "INSERT INTO addresstbl
-		(address1, address2, city, state, zip)
-		VALUES
-		( '$clientaddress1', '$clientaddress2', '$clientcity', '$clientstate', '$clientzip' );
-		";
-
-	$sql_result = @mysql_query($sql, $dbConn);
-	if (!$sql_result)
-	{
-		$log = new ErrorLog("logs/");
-		$sqlerr = mysql_error();
-		$log->writeLog("SQL error: $sqlerr - Error doing insert address for add/update client details");
-		$log->writeLog("SQL: $sql");
-
-		$rv = "";
-		exit($rv);
-	}
-
-	$clientaddressid = mysql_insert_id();
-
 	$sql = "INSERT INTO clienttbl
-		(name, addressid, status, rate)
+		( name, 
+		  address1, 
+		  address2, 
+		  city, 
+		  state, 
+		  zip, 
+		  status, 
+		  rate)
 		VALUES
-		( '$clientname', '$addressid', '$clientstatus', '$clientrate');
-		";
+		( '$clientname', 
+		  '$clientaddress1', 
+		  '$clientaddress2', 
+		  '$clientcity', 
+		  '$clientstate', 
+		  '$clientzip',  
+		  '$clientstatus', 
+		  '$clientrate')";
+
+		// print $sql;
+		// exit();
 
 	$sql_result = @mysql_query($sql, $dbConn);
 	if (!$sql_result)
@@ -114,22 +107,26 @@ if ($clientid == 0)
 		exit($rv);
 	}	
 
-	$clientid = mysql_insert_id();
+	$clientid = mysql_insert_id($dbConn);
 }
 else
 {
 	//--------------------------------------
 	// we are an update
-	// first update to client table 
-	// then get address id
-	// then update to address table
 	//--------------------------------------
 	$sql = "UPDATE clienttbl
 			SET name = '$clientname', 
-				status = '$clientstatus', 
-				rate = '$clientrate'
+			address1 = '$clientaddress1', 
+			address2 = '$clientaddress2',
+			city = '$clientcity',
+			state = '$clientstate',
+			zip = '$clientzip',
+			status = '$clientstatus', 
+			rate = '$clientrate'
 			WHERE id = '$clientid'
 			";
+
+			// print $sql;
 
 	$sql_result = @mysql_query($sql, $dbConn);
 	if (!$sql_result)
@@ -142,47 +139,6 @@ else
 		$rv = "";
 		exit($rv);
 	}	
-	
-	// now get address id for this client
-	$sql = "SELECT addressid FROM clienttbl WHERE id = '$clientid'";
-
-	$sql_result = @mysql_query($sql, $dbConn);
-	if (!$sql_result)
-	{
-		$log = new ErrorLog("logs/");
-		$sqlerr = mysql_error();
-		$log->writeLog("SQL error: $sqlerr - Error doing SELECT to get addressid from client for add/update client details");
-		$log->writeLog("SQL: $sql");
-
-		$rv = "";
-		exit($rv);
-	}	
-
-	$results = mysql_fetch_assoc($sql_result);
-	$clientaddressid = $results["addressid"];
-
-	// now update address table
-	$sql = "UPDATE addresstbl 
-			SET address1 = '$clientaddress1', 
-				address2 = '$clientaddress2',
-				city = '$clientcity',
-				state = '$clientstate',
-				zip = '$clientzip'
-			WHERE id = '$clientaddressid'
-		";
-
-	$sql_result = @mysql_query($sql, $dbConn);
-	if (!$sql_result)
-	{
-		$log = new ErrorLog("logs/");
-		$sqlerr = mysql_error();
-		$log->writeLog("SQL error: $sqlerr - Error doing update address for add/update client details");
-		$log->writeLog("SQL: $sql");
-
-		$rv = "";
-		exit($rv);
-	}
-
 }
 
 //
@@ -198,8 +154,5 @@ mysql_close($dbConn);
 //
 // pass back info
 //
-if ($clientid > 0)
-{
-	exit($clientid);
-}
+print $clientid;
 ?>

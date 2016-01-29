@@ -1,16 +1,16 @@
 <div class="container-fluid">
 <div class="row">
     <div class="col-md-12">
-        <h2 style="color:maroon;font-weight:900;">Administration Clients</h2>
+        <div style="color:teal;font-weight:600;letter-spacing:3px;font-size:18px;">Administration Clients</div>
     </div>
 </div>   <!-- end of row -->
 
 <div style="padding-top:35px;" class="row">
     <div class="col-md-12">
-    	<span style="color:maroon;font-weight:600;padding-left:40px;">Client:</span>
+    	<span style="color:lightgrey;font-weight:600;padding-left:40px;">Client:</span>
         &nbsp;
-        <select id="clientpicker" ng-model="clients.id" ng-change="showClientInformation(this.clients.id)">
-            <option ng-repeat="client in clients" ng-selected="{{client.id == currentClient}}" value="{{client.id}}">{{client.name}}</option>
+        <select id="clientpicker" class="customSelect" ng-model="clients.id" ng-change="showClientInformation(this.clients.id)">
+            <option ng-repeat="client in clients" ng-selected="{{client.id == current.client}}" value="{{client.id}}">{{client.name}}</option>
         </select>
         &nbsp;
         <button style="margin-left:25px;" id="clearclientdetails" class="btn btn-xs btn-primary" type="button" data-ng-click="clearClientDetails()">New</button>
@@ -22,51 +22,51 @@
     <form id="adminClientForm" class="form-horizontal" method="post"> 
     	<div id="alert_msg"></div>
 	    <div class="form-group">
-		    <label for="clientname" class="col-md-2 control-label">Institution Name</label>
+		    <label style="color:lightgrey;" for="clientname" class="col-md-2 control-label">Institution Name</label>
 		    <div class="col-md-10">
 		      <input size="30" id="clientname" name="clientname" ng-model="clientdetails.name" type="text" value="" placeholder="Institution Name" required>
 		    </div>
 		</div>
 
 		<div class="form-group">
-		    <label for="clientaddress1" class="col-md-2 control-label">Address</label>
+		    <label style="color:lightgrey;" for="clientaddress1" class="col-md-2 control-label">Address</label>
 		    <div class="col-md-10">
 		      <input size="50" id="clientaddress1" name="clientaddress1" ng-model="clientdetails.address1" type="text" placeholder="Address" required>
 		    </div>
 		</div>
 
 		<div class="form-group">
-		    <label for="clientaddress2" class="col-md-2 control-label">&nbsp;</label>
+		    <label style="color:lightgrey;" for="clientaddress2" class="col-md-2 control-label">&nbsp;</label>
 		    <div class="col-md-10">
 		      <input size="50" id="clientaddress2" name="clientaddress2" ng-model="clientdetails.address2" type="text" placeholder="">
 		    </div>
 		</div>
 
 		<div class="form-group">
-		    <label for="clientcity" class="col-md-2 control-label">City</label>
+		    <label style="color:lightgrey;" for="clientcity" class="col-md-2 control-label">City</label>
 		    <div class="col-md-10">
 		      <input size="30" id="clientcity" name="clientcity" ng-model="clientdetails.city" type="text" placeholder="City" required>
 		    </div>
 		</div>
 
 		<div class="form-group">
-		    <label for="clientstate" class="col-md-2 control-label">State</label>
+		    <label style="color:lightgrey;" for="clientstate" class="col-md-2 control-label">State</label>
 		    <div class="col-md-10">
-		    	<select id="clientstate" name="clientstate" ng-model="clientdetails.state" required>
+		    	<select id="clientstate" class="customSelect" name="clientstate" ng-model="clientdetails.state" required>
 		            <option ng-repeat="state in states" ng-selected="{{state.value == clientdetails.state}}" value="{{state.value}}">{{state.name}}</option>
 		        </select>
 		    </div>
 		</div>
 
 		<div class="form-group">
-		    <label for="clientzip" class="col-md-2 control-label">ZIP</label>
+		    <label style="color:lightgrey;" for="clientzip" class="col-md-2 control-label">ZIP</label>
 		    <div class="col-md-10">
 		      <input size="10" id="clientzip" name="clientzip" ng-model="clientdetails.zip" type="text" placeholder="ZIP Code" required>
 		    </div>
 		</div>
 
 		<div class="form-group">
-		    <label for="clientrate" class="col-md-2 control-label">Rate / Hour</label>
+		    <label style="color:lightgrey;" for="clientrate" class="col-md-2 control-label">Rate / Hour</label>
 		    <div class="col-md-10">
 				<div class="input-group">
 					<span class="input-group-addon">$</span>
@@ -76,16 +76,16 @@
 		</div>
 
 		<div class="form-group">
-		    <label for="clientstatus" class="col-md-2 control-label">Status</label>
+		    <label style="color:lightgrey;" for="clientstatus" class="col-md-2 control-label">Status</label>
 		    <div class="col-md-10">
-		    	<select id="clientstatus" name="clientstatus" ng-model="clientdetails.status" required>
+		    	<select id="clientstatus" class="customSelect" name="clientstatus" ng-model="clientdetails.status" required>
 		            <option ng-repeat="status in statuses" ng-selected="{{status.value == clientdetails.status}}" value="{{status.value}}">{{status.name}}</option>
 		        </select>
 		    </div>
 		</div>
 
          <div style="padding-top:35px;"  class="form-group">
-		    <label for="addnewclient" class="col-md-2 control-label">&nbsp;</label>
+		    <label style="color:lightgrey;" for="addnewclient" class="col-md-2 control-label">&nbsp;</label>
 		    <div class="col-md-10">
 		      <button id="addnewclient" class="btn btn-primary" type="button" data-ng-click="addNewClient()">Add/Update Client</button>
 		    </div>

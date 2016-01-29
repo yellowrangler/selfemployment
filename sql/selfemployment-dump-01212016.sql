@@ -98,9 +98,9 @@ CREATE TABLE `contactstbl` (
 LOCK TABLES `contactstbl` WRITE;
 /*!40000 ALTER TABLE `contactstbl` DISABLE KEYS */;
 INSERT INTO `contactstbl` (`id`, `clientid`, `name`, `title`, `mobilephone`, `deskphone`, `email`) VALUES (1,1,'Marc Check','VP of IT','(585) 755-8622','(617) 589-4279','mcheck@mos.org');
-INSERT INTO `contactstbl` (`id`, `clientid`, `name`, `title`, `mobilephone`, `deskphone`, `email`) VALUES (2,1,'Ben Wilson','IT Manager','(585) 506-7765','','bwilson@mos.org');
+INSERT INTO `contactstbl` (`id`, `clientid`, `name`, `title`, `mobilephone`, `deskphone`, `email`) VALUES (2,1,'Ben Wilson','IT Manager','(585) 506-7765','(617) 589-0143','bwilson@mos.org');
 INSERT INTO `contactstbl` (`id`, `clientid`, `name`, `title`, `mobilephone`, `deskphone`, `email`) VALUES (3,1,'Arika Madouros-Prime','Sr Web Developer','','(617) 589-0235','amadouros@mos.org');
-INSERT INTO `contactstbl` (`id`, `clientid`, `name`, `title`, `mobilephone`, `deskphone`, `email`) VALUES (4,2,'Tarry Cutler','VP of Product Design','(781) 342-0204','','TCutler@healthallianze.com');
+INSERT INTO `contactstbl` (`id`, `clientid`, `name`, `title`, `mobilephone`, `deskphone`, `email`) VALUES (4,2,'Tarry Cutler','VP of Product Design','(781) 342-0204','781-342-0206','TCutler@healthallianze.com');
 /*!40000 ALTER TABLE `contactstbl` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -120,7 +120,7 @@ CREATE TABLE `projectdailytimetbl` (
   `timeinterval` float NOT NULL DEFAULT '0',
   `intervaldescription` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -132,15 +132,23 @@ LOCK TABLES `projectdailytimetbl` WRITE;
 INSERT INTO `projectdailytimetbl` (`id`, `projectid`, `enterdate`, `starttime`, `stoptime`, `timeinterval`, `intervaldescription`) VALUES (1,2,'2015-11-12 00:00:00','2015-11-12 09:15:00','2015-11-12 12:25:00',3.2,'Research');
 INSERT INTO `projectdailytimetbl` (`id`, `projectid`, `enterdate`, `starttime`, `stoptime`, `timeinterval`, `intervaldescription`) VALUES (2,2,'2015-11-12 00:00:00','2015-11-12 13:45:00','2015-11-12 15:28:00',1.7,'Blah');
 INSERT INTO `projectdailytimetbl` (`id`, `projectid`, `enterdate`, `starttime`, `stoptime`, `timeinterval`, `intervaldescription`) VALUES (3,2,'2016-01-19 00:00:00','2016-01-19 13:25:00','2016-01-19 15:35:00',2.2,'Analysis');
-INSERT INTO `projectdailytimetbl` (`id`, `projectid`, `enterdate`, `starttime`, `stoptime`, `timeinterval`, `intervaldescription`) VALUES (6,2,'2016-01-20 00:00:00','2016-01-20 17:00:00','2016-01-20 17:30:00',0.5,'test 2');
 INSERT INTO `projectdailytimetbl` (`id`, `projectid`, `enterdate`, `starttime`, `stoptime`, `timeinterval`, `intervaldescription`) VALUES (7,2,'2016-01-20 00:00:00','2016-01-20 09:34:00','2016-01-20 10:00:00',0.4,'test 3');
 INSERT INTO `projectdailytimetbl` (`id`, `projectid`, `enterdate`, `starttime`, `stoptime`, `timeinterval`, `intervaldescription`) VALUES (8,2,'2016-01-21 00:00:00','2016-01-21 09:00:00','2016-01-21 11:00:00',2,'Next day');
-INSERT INTO `projectdailytimetbl` (`id`, `projectid`, `enterdate`, `starttime`, `stoptime`, `timeinterval`, `intervaldescription`) VALUES (9,2,'2016-01-20 00:00:00','2016-01-20 18:00:00','2016-01-20 19:00:00',1,'test 4');
+INSERT INTO `projectdailytimetbl` (`id`, `projectid`, `enterdate`, `starttime`, `stoptime`, `timeinterval`, `intervaldescription`) VALUES (9,2,'2016-01-20 00:00:00','2016-01-20 17:10:00','2016-01-20 20:15:00',3.1,'test 4 updated again this time by phone');
 INSERT INTO `projectdailytimetbl` (`id`, `projectid`, `enterdate`, `starttime`, `stoptime`, `timeinterval`, `intervaldescription`) VALUES (10,1,'2016-01-21 00:00:00','2016-01-21 16:35:00','2016-01-21 18:35:00',2,'toura test');
 INSERT INTO `projectdailytimetbl` (`id`, `projectid`, `enterdate`, `starttime`, `stoptime`, `timeinterval`, `intervaldescription`) VALUES (11,4,'2016-01-04 00:00:00','2016-01-04 05:30:00','2016-01-04 20:45:00',15.3,'Big push');
 INSERT INTO `projectdailytimetbl` (`id`, `projectid`, `enterdate`, `starttime`, `stoptime`, `timeinterval`, `intervaldescription`) VALUES (12,4,'2016-01-05 00:00:00','2016-01-05 08:23:00','2016-01-05 10:23:00',2,'little push');
 INSERT INTO `projectdailytimetbl` (`id`, `projectid`, `enterdate`, `starttime`, `stoptime`, `timeinterval`, `intervaldescription`) VALUES (13,5,'2016-01-19 00:00:00','2016-01-19 08:00:00','2016-01-19 12:00:00',4,'Build server in Manchester');
 INSERT INTO `projectdailytimetbl` (`id`, `projectid`, `enterdate`, `starttime`, `stoptime`, `timeinterval`, `intervaldescription`) VALUES (14,5,'2016-01-20 00:00:00','2016-01-20 09:23:00','2016-01-20 22:23:00',13,'Add modem');
+INSERT INTO `projectdailytimetbl` (`id`, `projectid`, `enterdate`, `starttime`, `stoptime`, `timeinterval`, `intervaldescription`) VALUES (15,2,'2016-01-23 00:00:00','2016-01-23 10:45:00','2016-01-23 12:13:00',1.5,'Development');
+INSERT INTO `projectdailytimetbl` (`id`, `projectid`, `enterdate`, `starttime`, `stoptime`, `timeinterval`, `intervaldescription`) VALUES (18,2,'2016-01-25 00:00:00','2016-01-25 10:35:00','2016-01-25 23:45:00',13.2,'test');
+INSERT INTO `projectdailytimetbl` (`id`, `projectid`, `enterdate`, `starttime`, `stoptime`, `timeinterval`, `intervaldescription`) VALUES (19,2,'2016-01-20 00:00:00','2016-01-20 22:23:00','2016-01-20 23:47:00',1.4,'test 1');
+INSERT INTO `projectdailytimetbl` (`id`, `projectid`, `enterdate`, `starttime`, `stoptime`, `timeinterval`, `intervaldescription`) VALUES (21,2,'2016-01-20 00:00:00','2016-01-20 06:23:00','2016-01-20 08:00:00',1.6,'test of unfinished work now finished');
+INSERT INTO `projectdailytimetbl` (`id`, `projectid`, `enterdate`, `starttime`, `stoptime`, `timeinterval`, `intervaldescription`) VALUES (22,6,'2016-01-22 00:00:00','2016-01-22 10:30:00','2016-01-22 11:30:00',1,'Review and analysis');
+INSERT INTO `projectdailytimetbl` (`id`, `projectid`, `enterdate`, `starttime`, `stoptime`, `timeinterval`, `intervaldescription`) VALUES (23,6,'2016-01-23 00:00:00','2016-01-23 16:15:00','2016-01-23 19:00:00',2.75,'More review');
+INSERT INTO `projectdailytimetbl` (`id`, `projectid`, `enterdate`, `starttime`, `stoptime`, `timeinterval`, `intervaldescription`) VALUES (24,6,'2016-01-24 00:00:00','2016-01-24 11:30:00','2016-01-24 12:15:00',0.75,'Development');
+INSERT INTO `projectdailytimetbl` (`id`, `projectid`, `enterdate`, `starttime`, `stoptime`, `timeinterval`, `intervaldescription`) VALUES (25,6,'2016-01-24 00:00:00','2016-01-24 12:30:00','2016-01-24 13:15:00',0.75,'Development');
+INSERT INTO `projectdailytimetbl` (`id`, `projectid`, `enterdate`, `starttime`, `stoptime`, `timeinterval`, `intervaldescription`) VALUES (26,6,'2016-01-25 00:00:00','2016-01-25 13:30:00','2016-01-25 14:30:00',1,'Development and Testing');
 /*!40000 ALTER TABLE `projectdailytimetbl` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -155,9 +163,13 @@ CREATE TABLE `projecttbl` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `clientid` bigint(20) unsigned NOT NULL DEFAULT '0',
   `name` varchar(255) DEFAULT NULL,
+  `contactid` bigint(20) unsigned NOT NULL DEFAULT '0',
+  `rate` decimal(5,2) DEFAULT NULL,
+  `startdate` datetime DEFAULT NULL,
+  `enddate` datetime DEFAULT NULL,
   `status` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -166,11 +178,12 @@ CREATE TABLE `projecttbl` (
 
 LOCK TABLES `projecttbl` WRITE;
 /*!40000 ALTER TABLE `projecttbl` DISABLE KEYS */;
-INSERT INTO `projecttbl` (`id`, `clientid`, `name`, `status`) VALUES (1,1,'Toura',NULL);
-INSERT INTO `projecttbl` (`id`, `clientid`, `name`, `status`) VALUES (2,1,'Fluid Surveys',NULL);
-INSERT INTO `projecttbl` (`id`, `clientid`, `name`, `status`) VALUES (3,1,'Bronto',NULL);
-INSERT INTO `projecttbl` (`id`, `clientid`, `name`, `status`) VALUES (4,2,'Development',NULL);
-INSERT INTO `projecttbl` (`id`, `clientid`, `name`, `status`) VALUES (5,2,'Environment Setup',NULL);
+INSERT INTO `projecttbl` (`id`, `clientid`, `name`, `contactid`, `rate`, `startdate`, `enddate`, `status`) VALUES (1,1,'Toura',2,NULL,NULL,NULL,NULL);
+INSERT INTO `projecttbl` (`id`, `clientid`, `name`, `contactid`, `rate`, `startdate`, `enddate`, `status`) VALUES (2,1,'Fluid Surveys',2,NULL,NULL,NULL,NULL);
+INSERT INTO `projecttbl` (`id`, `clientid`, `name`, `contactid`, `rate`, `startdate`, `enddate`, `status`) VALUES (3,1,'Bronto',3,NULL,NULL,NULL,NULL);
+INSERT INTO `projecttbl` (`id`, `clientid`, `name`, `contactid`, `rate`, `startdate`, `enddate`, `status`) VALUES (4,2,'Development',4,NULL,NULL,NULL,NULL);
+INSERT INTO `projecttbl` (`id`, `clientid`, `name`, `contactid`, `rate`, `startdate`, `enddate`, `status`) VALUES (5,2,'Environment Setup',4,NULL,NULL,NULL,NULL);
+INSERT INTO `projecttbl` (`id`, `clientid`, `name`, `contactid`, `rate`, `startdate`, `enddate`, `status`) VALUES (6,1,'Fluid Surveys 2016',2,NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `projecttbl` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -183,4 +196,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-01-21 17:08:17
+-- Dump completed on 2016-01-26 12:01:06

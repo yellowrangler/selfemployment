@@ -88,6 +88,15 @@ seApp.factory('timeDailyEntryFactory', function($q, $http) {
         })
     }
 
+    factory.getActiveDailyTime = function (data) {
+        return $http({ 
+            method: 'POST', 
+            url: "app/ajax/getactivetimedailyentry.php",
+            data: data,
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+        })
+    }
+
     factory.deleteDailyTime = function (data) {
         return $http({ 
             method: 'POST', 

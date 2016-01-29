@@ -10,12 +10,22 @@ include ('../class/class.AccessLog.php');
 $datetime = date("Y-m-d H:i:s");
 
 $clientid = $_POST["clientid"];
+$projectid = $_POST["projectid"];
+$entrydate = $_POST["entrydate"];
+
+// create time stamp versions for select
+$entrydateTS = "";
+if ($entrydate != "")
+{
+	$entrydateTS = date("Y-m-d H:i:s", strtotime($entrydate));
+
+}
 
 //
 // messaging
 //
 $returnArrayLog = new AccessLog("logs/");
-// $returnArrayLog->writeLog("client details request started" );
+// $returnArrayLog->writeLog("Get time entry daily started" );
 
 //------------------------------------------------------
 // get admin user info
@@ -34,7 +44,7 @@ if (!$dbConn)
 {
 	$log = new ErrorLog("logs/");
 	$dberr = mysql_error();
-	$log->writeLog("DB error: $dberr - Error mysql connect. Unable to get client details.");
+	$log->writeLog("DB error: $dberr - Error mysql connect. Unable to get time entry daily project list.");
 
 	$rv = "";
 	exit($rv);
@@ -44,24 +54,43 @@ if (!mysql_select_db($DBschema, $dbConn))
 {
 	$log = new ErrorLog("logs/");
 	$dberr = mysql_error();
-	$log->writeLog("DB error: $dberr - Error selecting db Unable to get client details.");
+	$log->writeLog("DB error: $dberr - Error selecting db Unable to get time entry daily project list.");
 
 	$rv = "";
 	exit($rv);
 }
 
 //---------------------------------------------------------------
-// get patient information using information passed. limit 5 
+// get project information using information passed. 
 //---------------------------------------------------------------
+$sql = "SELECT 
+	PDT.id as projectdailytimeid, 
+	projectid,enterdate,
+	DATE_FORMAT(starttime,'%h %i %p') AS fstarttime, 
+	DATE_FORMAT(starttime,'%m-%d-%Y') as fstartdate,	
+	PT.name as projectname,
+	DATE_FORMAT(stoptime,'%h %i %p') as fstoptime,
+	DATE_FORMAT(stoptime,'%m-%d-%Y') as fstopdate,
+	FORMAT(timeinterval,2) as finterval,
+	intervaldescription
+	FROM projectdailytimetbl PDT 
+	LEFT JOIN projecttbl PT ON PT.id = PDT.projectid
+	WHERE PDT.projectid = $projectid 
+	AND (invoiceid IS NULL OR invoiceid = '') ";
 
-$sql = "SELECT * FROM clienttbl WHERE id = $clientid";
+	if ($entrydateTS != "")
+	{
+		$sql = $sql . " AND enterdate = '$entrydateTS' ";
+	}
+
+	$sql = $sql . " ORDER BY starttime ASC ";
 
 $sql_result = @mysql_query($sql, $dbConn);
 if (!$sql_result)
 {
 	$log = new ErrorLog("logs/");
 	$sqlerr = mysql_error();
-	$log->writeLog("SQL error: $sqlerr - Error doing get client details select");
+	$log->writeLog("SQL error: $sqlerr - Error doing get time entry daily project list select");
 	$log->writeLog("SQL: $sql");
 
 	$rv = "";
@@ -71,7 +100,10 @@ if (!$sql_result)
 $count = mysql_num_rows($sql_result);
 if ($count > 0)
 {
-	$results = mysql_fetch_assoc($sql_result);
+	$rows = array();
+	while($row = mysql_fetch_assoc($sql_result)) {
+	    $results[] = $row;
+	}
 }
 
 //

@@ -153,7 +153,6 @@ seApp.service('stateService', function () {
     }
 
     var states = [
-        { value: "AL", name: "Alabama" },  
         { value: "AL", name: "Alabama" },
         { value: "AK", name: "Alaska" },
         { value: "AZ", name: "Arizona" },

@@ -224,7 +224,7 @@ controllers.timeentrydailyController = function ($scope, clientServices, project
 
         var data = "clientid="+clientid+"&projectid="+projectid+"&entrydate="+entrydate;
 
-        timeDailyEntryFactory.getDailyTime(data)
+        timeDailyEntryFactory.getActiveDailyTime(data)
             .success( function(JSONstr) {
                 $scope.timeDailyEntries = JSONstr;
 
@@ -241,7 +241,7 @@ controllers.timeentrydailyController = function ($scope, clientServices, project
                 //
                 var data = "clientid="+clientid+"&projectid="+projectid+"&entrydate=";
 
-                timeDailyEntryFactory.getDailyTime(data)
+                timeDailyEntryFactory.getActiveDailyTime(data)
                     .success( function(JSONstr) {
                         $scope.fullTimeDailyEntries = JSONstr;
 
@@ -615,7 +615,7 @@ controllers.invoicesController = function ($scope, $http, $location, clientServi
 }
 
 controllers.adminclientsController = function ($scope, $http, $location, clientServices, clientFactory, stateService, clientStatusService) {
-    $scope.clients = "";
+    $scope.current = {};
     $scope.current.client = "";
     $scope.clientdetails = "";
 
@@ -653,9 +653,8 @@ controllers.adminclientsController = function ($scope, $http, $location, clientS
     function clearClientDetails()
     {
         $scope.clientdetails = "";
-        $scope.current.client = 0;
+        $scope.current.client = "";
         clientServices.addCurrentClient($scope.current.client,"Clientid");
-        $("#clientid").val("0");
     }
 
     function addNewClient()
@@ -667,12 +666,16 @@ controllers.adminclientsController = function ($scope, $http, $location, clientS
         var data = $("#adminClientForm").serialize();
         
         clientFactory.addUpdateClient(data)
-                .success( function(data) {
-                    getClientDetails(data); 
-                })
-                .error( function(edata) {
-                    alert("Failed addUpdate client");
-                });
+            .success( function(data) {
+                getClientList();
+
+                getClientDetails(data); 
+
+                alert("Succesfully addUpdate client");
+            })
+            .error( function(edata) {
+                alert("Failed addUpdate client");
+            });
         
     }
 
