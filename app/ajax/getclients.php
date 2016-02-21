@@ -32,9 +32,11 @@ if (!$dbConn)
 {
 	$log = new ErrorLog("logs/");
 	$dberr = mysql_error();
-	$log->writeLog("DB error: $dberr - Error mysql connect. Unable to get client list.");
+	$rv = "DB error: $dberr - Error mysql connect. Unable to get client list.";
+	$log->writeLog($rv);
 
-	$rv = "";
+	print $rv;
+
 	exit($rv);
 }
 
@@ -42,9 +44,11 @@ if (!mysql_select_db($DBschema, $dbConn))
 {
 	$log = new ErrorLog("logs/");
 	$dberr = mysql_error();
-	$log->writeLog("DB error: $dberr - Error selecting db Unable to get client list.");
+	$rv = "DB error: $dberr - Error selecting db Unable to get client list.";
+	$log->writeLog($rv);
 
-	$rv = "";
+	print $rv;
+
 	exit($rv);
 }
 
@@ -59,10 +63,11 @@ if (!$sql_result)
 {
 	$log = new ErrorLog("logs/");
 	$sqlerr = mysql_error();
-	$log->writeLog("SQL error: $sqlerr - Error doing get client list select");
-	$log->writeLog("SQL: $sql");
+	$rv = "SQL error: $sqlerr - Error doing get client list select. SQL = $sql";
+	$log->writeLog($rv);
 
-	$rv = "";
+	print $rv;
+
 	exit($rv);
 }
 

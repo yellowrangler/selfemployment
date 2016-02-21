@@ -523,7 +523,8 @@ controllers.timeentryreviewController = function ($scope, $http, $location, clie
 
 controllers.invoicesController = function ($scope, $http, $location, clientServices, projectServices, dateServices, clientFactory, projectFactory, timeDailyEntryFactory) {
     $scope.clients = "";
-    $scope.current.client = "";
+    $scope.current = "";
+    $scope.current.client = 1;
     $scope.timeDailyEntriesReview = "";
     $scope.timeDailyEntryReviewTotal = "0.00";
 
@@ -542,12 +543,7 @@ controllers.invoicesController = function ($scope, $http, $location, clientServi
 
     function getTimeEntriesForClient(id) 
     {
-        if (id != "")
-        {
-            $scope.current.client  = id;
-        }
-
-        var clientid = $scope.current.client ;
+        var clientid = $scope.current.client;
         var projectid = 0;
         var fromdate = $("#datepickerfrom").val();
         var todate = $("#datepickerto").val();

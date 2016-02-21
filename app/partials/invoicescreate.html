@@ -30,11 +30,11 @@ table tr td {
     <div class="col-lg-12">
     	<span style="color:maroon;font-weight:600;">Client:</span>
         &nbsp;
-        <select id="clientpicker" ng-model="clients.id" ng-change="getTimeEntriesForClient(this.clients.id)">
-            <option ng-repeat="client in clients" ng-selected="{{client.id == currentClient}}" value="{{client.id}}">{{client.name}}</option>
+        <select id="clientpicker" ng-model="current.client" ng-change="getTimeEntriesForClient(current.client)">
+            <option ng-repeat="client in clients" ng-selected="{{client.id == current.client}}" value="{{client.id}}">{{client.name}}</option>
         </select>
 
-        <button style="margin-left:25px;" id="submitShowEntries" class="btn btn-xs btn-primary" type="button" data-ng-click="getTimeEntriesForClient(currentClient)">Show Entries</button>
+        <button style="margin-left:25px;" id="submitShowEntries" class="btn btn-xs btn-primary" type="button" data-ng-click="getTimeEntriesForClient(current.client)">Show Entries</button>
     </div>
 </div>  
 </form>
@@ -50,10 +50,10 @@ table tr td {
             <th style="text-align:center">Comments</th>
         </tr>
         <tr ng-model="timeDailyEntryReview" ng-repeat="timeDailyEntryReview in timeDailyEntriesReview" >
-            <td name="startimeEntry">{{timeDailyEntryReview.fenterdate}}</td>
-            <td name="startimeEntry">{{timeDailyEntryReview.clientname}}</td>            
-            <td name="stopimeEntry">{{timeDailyEntryReview.projectname}}</td>
-            <td name="intervalEntry">{{timeDailyEntryReview.finterval}}</td>
+            <td name="fenterdate">{{timeDailyEntryReview.fenterdate}}</td>
+            <td name="clientname">{{timeDailyEntryReview.clientname}}</td>            
+            <td name="projectname">{{timeDailyEntryReview.projectname}}</td>
+            <td style="text-align:right" name="finterval">{{timeDailyEntryReview.finterval}}</td>
             <td name="descriptionEntry">{{timeDailyEntryReview.intervaldescription}}</td>
         </tr>
         <tr><td colspan="7">&nbsp;</td>
